@@ -1,7 +1,7 @@
 # wound-healingArea
 
 ## Description
-healingArea is an ImageJ macro for image analysis, that measures wound-healing areas, capable of illustrating the evolution of the healing along time. This tool was specifically developed to measure wound area on images acquired in widefield inverted microscopes or inCell assays. It includes simple user interface to select main parameters of background subtraction, filters and threshold segmentation .
+healingArea is an ImageJ macro for image analysis, that measures wound-healing areas, capable of illustrating the evolution of the healing along time. This tool was specifically developed to measure wound area on images acquired in widefield inverted microscopes [1] or inCell assays. It includes simple user interface to select main parameters of background subtraction, filters and threshold segmentation .
 
 Wound-healing assay example:
 
@@ -15,6 +15,10 @@ This macro works on opened images or ask for opening. A preprocessing step consi
 
 ## Output: 
   plot and results table with wound area for each time frame 
+  
+## Referenced at:
+
+[1] Maria Inês Rocha et al (2020) Leishmania infantum Enhances Migration of Macrophages via a Phosphoinositide 3-Kinase γ-Dependent Pathway. ACS Infect. Dis. 2020, 6, 7, 1643–1649
   
 ## License 
 This macro should NOT be redistributed without author's permission. 
