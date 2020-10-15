@@ -9,7 +9,7 @@
 /* Title: Wound healing 
 * v1.0
 * 
-* Short description: Identify wound-helaing area along time or for one frame
+* Short description: Identify wound-healing area along time or for one frame
 	* * Preprocessing steps: Remove background, gaussian blur 
 	* * Apply automatic threshold
 	* * Post-processing: Fill holes and define ROI minimum area
@@ -84,59 +84,55 @@ print("Minimum wound area", min_area);
 img = getTitle();		//original image	
 Satisfied = false;
 while (Satisfied==false){ 
-		Dialog.create("Algorithm parameters");
-		Dialog.addMessage("Select algorithm parameters");
-		Dialog.addNumber("Gaussian sigma", 3);
-		Dialog.addNumber("Backgroung radius", 10);
-		items = newArray("Minimum","Otsu","Li","MaxEntropy","Default");
-		Dialog.addChoice("Threshold algorithm", items);
-		Dialog.show();
+	Dialog.create("Algorithm parameters");
+	Dialog.addMessage("Select algorithm parameters");
+	Dialog.addNumber("Gaussian sigma", 3);
+	Dialog.addNumber("Backgroung radius", 10);
+	items = newArray("Minimum","Otsu","Li","MaxEntropy","Default");
+	Dialog.addChoice("Threshold algorithm", items);
+	Dialog.show();
+	sigma = Dialog.getNumber();
+	radius = Dialog.getNumber();
+	thres = Dialog.getChoice();
+	selectWindow(img);
+	run("Duplicate...", "duplicate");
+		
+	//Remove background and gaussian blur for segmentation
+	run("Subtract Background...", "rolling="+ radius + " light stack");
+	run("Gaussian Blur...", "sigma=" + sigma +" stack");
+	rename("Processed");
+	
+	//Segmentation
+	setAutoThreshold("Minimum dark");
+	run("Convert to Mask", "method=" + thres + " background=Dark");
+	
+	//Post-processing
+	run("Fill Holes", "stack");	
+	
+	//Find wound countours
+	run("Set Measurements...", "area stack redirect=None decimal=3");
 
-		sigma = Dialog.getNumber();
-		radius = Dialog.getNumber();
-		thres = Dialog.getChoice();
+	//adjust minimim size for your particular case
+	run("Analyze Particles...", "size="+ min_area + "-Infinity show=Masks display clear include add stack");
+	for (i = 0; i < nResults(); i++) {
+		setResult("Units", i, unit + "^2");
+	}
+	updateResults();
+	rename("Mask");
 
+	///Satisfied?
+	waitForUser("Check wound detection", "Check the quality of wound detection\nThen click OK.");
+	Dialog.create("Satisfied with wound detection?");
+	Dialog.addMessage("If you are not satisfied, do not tick the box and just click Ok.\nThis will take you back to the previous step for the selection of the parametrer.\nOtherwise tick the box and click OK to proceed to the next step.");
+	Dialog.addCheckbox("Satisfied?", false);
+	Dialog.show();
+	Satisfied = Dialog.getCheckbox();
+	wait(1000);
+	
+	if (Satisfied == false){
 		selectWindow(img);
-		run("Duplicate...", "duplicate");
-			
-		//Remove background and gaussian blur for segmentation
-		run("Subtract Background...", "rolling="+ radius + " light stack");
-		run("Gaussian Blur...", "sigma=" + sigma +" stack");
-		rename("Processed");
-		
-		//Segmentation
-		setAutoThreshold("Minimum dark");
-		run("Convert to Mask", "method=" + thres + " background=Dark");
-		
-		//Post-processing
-		run("Fill Holes", "stack");	
-		
-		//Find wound countours
-		run("Set Measurements...", "area stack redirect=None decimal=3");
-	
-		//adjust minimim size for your particular case
-		run("Analyze Particles...", "size="+ min_area + "-Infinity show=Masks display clear include add stack");
-		for (i = 0; i < nResults(); i++) {
-			setResult("Units", i, unit + "^2");
-		}
-		updateResults();
-
-		rename("Mask");
-
-		///Satisfied?
-		waitForUser("Check wound detection", "Check the quality of wound detection\nThen click OK.");
-		Dialog.create("Satisfied with wound detection?");
-		Dialog.addMessage("If you are not satisfied, do not tick the box and just click Ok.\nThis will take you back to the previous step for the selection of the parametrer.\nOtherwise tick the box and click OK to proceed to the next step.");
-		Dialog.addCheckbox("Satisfied?", false);
-		Dialog.show();
-		Satisfied = Dialog.getCheckbox();
-		wait(1000);
-	
-		if (Satisfied == false){
-			selectWindow(img);
-			close("\\Others");
-		
-		}
+		close("\\Others");
+	}
 }
 
 if(frames > 1 ){
@@ -172,7 +168,7 @@ saveAs("Results", output_dir + File.separator + name + ".xls");
 selectWindow("Processed");
 close();
 selectWindow(img);
-saveAs("tif", output_dir + File.separator + name + ".tif");
+//saveAs("tif", output_dir + File.separator + name + ".tif");
 roiManager("select", 0); //to preview
 
 
