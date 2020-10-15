@@ -1,12 +1,14 @@
 # wound-healingArea
 
-## Short description: 
-Identify wound-helaing area along time or for one frame
+## Description
+healingArea is an ImageJ macro for image analysis, that measures wound-healing areas, capable of illustrating the evolution of the healing along time. This tool was specifically developed to measure wound area on images acquired in widefield inverted microscopes or inCell assays. It includes simple user interface to select main parameters of background subtraction, filters and threshold segmentation .
 
-	* Preprocessing steps: Remove background, gaussian blur 
-	* Apply automatic threshold
-	* Post-processing: Fill holes and define ROI minimum area
-	* Measure area of each Roi;
+Wound-healing assay example:
+
+picture alt
+
+## How it works
+This macro works on opened images or ask for opening. A preprocessing step consists in removing background and apllying a Gaussian fiter, where the user can specify radius and sigma valures, respectively. Wound area is segmented by automatic threshold using user selection algorithm. Finally, the waound area is calculated for each frame. Some user-friendly dialogs are available to perform multiple options during the workflow execution. The output result combines the results table and the plot result along time; Complementary, the ROIs are saved for quality control. Note that while wound-healingArea is easy to use and semi-automatized, it only works efficiently in images with normalized intensities along time.
 	
 ## Input:
   2D/3D grey-scaled images 
