@@ -5,7 +5,7 @@ healingArea is an ImageJ macro for image analysis, that measures wound-healing a
 
 Wound-healing assay example:
 
-picture alt
+![picture alt](https://github.com/mafsousa/wound-healingArea/blob/main/example.png)
 
 ## How it works
 This macro works on opened images or ask for opening. A preprocessing step consists in removing background and apllying a Gaussian fiter, where the user can specify radius and sigma valures, respectively. Wound area is segmented by automatic threshold using user selection algorithm. Finally, the waound area is calculated for each frame. Some user-friendly dialogs are available to perform multiple options during the workflow execution. The output result combines the results table and the plot result along time; Complementary, the ROIs are saved for quality control. Note that while wound-healingArea is easy to use and semi-automatized, it only works efficiently in images with normalized intensities along time.
